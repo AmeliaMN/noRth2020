@@ -478,7 +478,7 @@ But, Facebook has been a bad actor when it comes to using data and protecting pe
 - [Facebook Engages in Online Segregation and Redlining Through Discriminatory Advertising System, Lawyers’ Committee Argues](https://lawyerscommittee.org/lawyers-committee-confronts-facebooks-attempts-to-dismiss-digital-redlining-lawsuit-against-its-housing-advertisements/)
 - [Facebook cannot separate itself from the hate it spreads ](https://onezero.medium.com/facebook-cannot-separate-itself-from-the-hate-it-spreads-967ec9b8793c)
 
-.footnote[December 2019 [Blog post about deleting Facebook](https://www.amelia.mn/blog/misc/2019/12/29/Deleting-Facebook.html), plus my [associated GitHub repo](https://github.com/AmeliaMN/deleting_facebook). The bullet-points on Facebook here are all from the last **week** (July 2020). For more on Facebook and other tech ethics, follow [@hypervisible](https://twitter.com/hypervisible).]
+.footnote[December 2019 [Blog post about deleting Facebook](https://www.amelia.mn/blog/misc/2019/12/29/Deleting-Facebook.html). The bullet-points on Facebook here are all from the last **week** (July 2020). For more on Facebook and other tech ethics, follow [@hypervisible](https://twitter.com/hypervisible).]
 
 
 ---
@@ -519,6 +519,9 @@ Facebook actually makes it pretty easy to get a lot of your data. You can choose
 - files
 ]
 
+.footnote[December 2019 [Blog post about deleting Facebook](https://www.amelia.mn/blog/misc/2019/12/29/Deleting-Facebook.html), plus my [associated GitHub repo](https://github.com/AmeliaMN/deleting_facebook).
+]
+
 ???
 
 In the nine months since I deleted my account, I have definitely reached into this data a fair amount. It has helped me verify dates of things that happened, remember jokes between my friends and I, etc. 
@@ -531,5 +534,41 @@ There were two notable things I wanted from my data that don't come from the dat
 - tagged photos
 - friends' birthdays
 
+There are python scripts out there to help you get each of those things. I was able to make the script for grabbing birthdays work, but none of the python scripts for tagged photos. 
 
+So, I wrote my own scraper in R. 
+
+.footnote[December 2019 [Blog post about deleting Facebook](https://www.amelia.mn/blog/misc/2019/12/29/Deleting-Facebook.html), plus my [associated GitHub repo](https://github.com/AmeliaMN/deleting_facebook).
+]
+
+---
+# Getting set up 
+
+```{r, eval=FALSE}
+library(RSelenium)
+rD <- rsDriver(port = 4444L, browser = "firefox")
+remDr <- rD$client
+```
+
+```{r, eval=FALSE}
+remDr$navigate("https://www.facebook.com/")
+
+YourLogIN <- "amelia.a.mcnamara@gmail.com"
+YourPassword <- "" # this is where your password goes
+
+remDr$findElement("id", "email")$sendKeysToElement(list(YourLogIN))
+remDr$findElement("id", "pass")$sendKeysToElement(list(YourPassword))
+remDr$findElement("id", "loginbutton")$clickElement()
+```
+
+
+Lazy hard-coding
+```{r, eval=FALSE}
+remDr$navigate("https://www.facebook.com/amelia.mcnamara/photos_of")
+```
+
+```{r, eval=FALSE}
+webElem <- remDr$findElement(using = "class", "uiMediaThumb")
+webElem$clickElement()
+```
 
