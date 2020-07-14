@@ -318,12 +318,17 @@ This is a function that finds that number.
 ---
 # Iterating over URLs
 
-```{r}
+```{r firstmap}
 library(purrr)
 
 roster <- roster %>% 
   mutate(commits = map_dbl(url, commits, session = session)) 
 ```
+
+```{r, echo=FALSE, out.width='30%', fig.cap="purrr hex sticker"}
+knitr::include_graphics("img/purrr.png")
+```
+
 
 .footnote[[Counting commits and peer code review](https://teachdatascience.com/countingcommits/), a post by me on the [Teach Data Science blog](https://teachdatascience.com)
 ]
@@ -571,4 +576,6 @@ remDr$navigate("https://www.facebook.com/amelia.mcnamara/photos_of")
 webElem <- remDr$findElement(using = "class", "uiMediaThumb")
 webElem$clickElement()
 ```
+
+
 
