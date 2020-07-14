@@ -316,26 +316,36 @@ Take a session, then jump to a url, then read the HTML, then select the HTML nod
 This is a function that finds that number. 
 
 ---
+# Aside-- selectorgadget
+
+It's really hard to figure out those selectors. One helpful tool is [selectorgadget](https://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html), "a JavaScript bookmarklet that allows you to interactively figure out what css selector you need to extract desired components from a page."
+
+
+---
 # Iterating over URLs
 
 ```{r firstmap}
 library(purrr)
 
 roster <- roster %>% 
-  mutate(commits = map_dbl(url, commits, session = session)) 
+  mutate(commits = map_dbl(url, commits, session = session)) #<<
 ```
 
+.pull-left[
 ```{r, echo=FALSE, out.width='30%', fig.cap="purrr hex sticker"}
 knitr::include_graphics("img/purrr.png")
 ```
+]
+.pull-right[
+`map_dbl()` is one of the map functions from the `purrr` package. It returns a vector of type double, so it needs to be inside a `mutate()` command. 
+]
 
-
-.footnote[[Counting commits and peer code review](https://teachdatascience.com/countingcommits/), a post by me on the [Teach Data Science blog](https://teachdatascience.com)
+.footnote[[Counting commits and peer code review](https://teachdatascience.com/countingcommits/), a post by me on the [Teach Data Science blog](https://teachdatascience.com). [purrr package](https://purrr.tidyverse.org/)
 ]
 
 ???
 
-Charlotte Wickham helped me with this code. 
+Charlotte Wickham helped me by refactoring this code. 
 
 ---
 class: big-bullet
@@ -368,20 +378,21 @@ Instead, I decided to grab those green blocks, which actually have data attached
 ![](img/GitHubSource2.png)
 
 ???
-Check it out! They have the dates and number of commits
+Check it out! They have the dates and number of commits. 
+
 
 
 ---
 # Here we go again
 
-```{r}
+```{r anothermap}
 commits_by_date <- function(url, session){
   session %>%
     jump_to(url) %>%
     read_html() %>%
     html_nodes("rect.day") %>%
     html_attrs() %>%
-    map_dfr(as.list) %>% 
+    map_dfr(as.list) %>% #<<
     select(count = `data-count`, date = `data-date`) %>% 
     mutate(
       date = parse_date(date),
@@ -389,6 +400,7 @@ commits_by_date <- function(url, session){
       )
 }
 ```
+
 
 .footnote[[Counting commits and peer code review](https://teachdatascience.com/countingcommits/), a post by me on the [Teach Data Science blog](https://teachdatascience.com)
 ]
@@ -470,6 +482,11 @@ for (i in 1:dim(roster)[1]){
 Earlier, I was showing you the code that Charlotte helped me refactor. This was what I actually used when I needed to figure out who won the t-shirt. This code is uuuugly. And slow. 
 
 Perfect code doesn't flow out of my (or any programmer's) fingers. If you don't succeed, try try again. 
+
+---
+# Refactoring
+
+Refactoring is the process of turning working but ugly or inefficient code into better, faster, cleaner code. You can do it yourself or you can have a peer do it. 
 
 ---
 class: big-bullet
